@@ -1,0 +1,85 @@
+.sidebar {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #fffbfb;
+  overflow-x: hidden;
+  padding-top: 16px;
+  border-right: 1px solid #300;
+}
+
+.sidebar a, .sidebar .sign-out {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #333;
+  display: block;
+}
+
+.sidebar a:hover, .sidebar .sign-out:hover {
+  color: #9a9a9a;
+}
+
+.sign-out {
+  position: relative;
+  top: 330px;
+  cursor: pointer;
+}
+
+.sign-out-icon {
+  font-size: 15pt;
+  position: relative;
+  top: 4px;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  padding: 0px 10px;
+}
+
+.arrow-toggle {
+  position: relative;
+  top: 22%;
+  left: 80%;
+  font-size: 18pt;
+  display: block;
+  cursor: pointer;
+}
+
+.sidebar-on {
+  display: block;
+}
+
+.sidebar-off {
+  min-width: 0px;
+}
+
+.arrow-toggle-on:hover {
+  cursor: pointer;
+}
+
+.sign-out {
+
+}
+
+.hamburger-nav {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 15px;
+  font-size: 18pt;
+  overflow-x: hidden;
+  padding-top: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar {
+    padding-top: 15px;
+  }
+  .sidebar a {
+    font-size: 18px;
+  }
+}

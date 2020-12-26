@@ -1,0 +1,15 @@
+/* Flashcard Arrows */
+
+svg.left-arrow {
+  float: left;
+  position: absolute;
+  left: -20px;
+  top: 43%;
+}
+
+svg.right-arrow {
+  float: right;
+  position: absolute;
+  left: 205px;
+  top: 44%;
+}
