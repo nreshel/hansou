@@ -4,7 +4,7 @@ import { ImArrowLeft2, ImArrowRight2 } from 'react-icons/im'
 import { GrRotateRight } from 'react-icons/gr'
 import '../css/Card.css';
 
-function FlashCard({ card }) {
+function FlashCard({ card, nextCard, prevCard }) {
   const { state, setState } = useContext(GlobalContext)
   console.log(card)
   const [flip, setFlip] = useState(false)
@@ -30,8 +30,8 @@ function FlashCard({ card }) {
             <div className="pin">{card && card.pin}</div>
           </div>
         </div>
-        <ImArrowLeft2 className="left-arrow" />
-        <ImArrowRight2 className="right-arrow" />
+        <ImArrowLeft2 className="left-arrow" onClick={() => prevCard()} />
+        <ImArrowRight2 className="right-arrow" onClick={() => nextCard()} />
       </div>
       <button>Done</button>
       <button>Forgot</button>
