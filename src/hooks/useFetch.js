@@ -54,6 +54,7 @@ export function useFetch() {
         cards: dbCards,
         cardsDone: dbCardsDone,
         card: dbCard,
+        cardSearch: [...dbCards, ...dbCardsDone],
         index: 0
       })
     })

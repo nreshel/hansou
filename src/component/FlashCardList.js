@@ -1,10 +1,12 @@
 import React, { memo, useCallback, useEffect, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { GlobalContext, GlobalProvider } from '../context/GlobalState'
 import { useFetch } from '../hooks/useFetch'
 import { app } from '../db/Firebase'
 import FlashCard from './FlashCard'
 import '../css/FlashCards.css'
 function FlashCardList() {
+  let history = useHistory();
   const { state, setState } = useContext(GlobalContext)
   useFetch();
   const nextCard = useCallback(() => {
@@ -76,6 +78,7 @@ function FlashCardList() {
         {/* <FlashCard card={Object.values(state.cards)[0]} /> */}
       </div>
     </div>
+    
   )
 }
 
