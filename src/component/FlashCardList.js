@@ -24,7 +24,7 @@ function FlashCardList() {
   }, [state.card, state.index, setState])
 
   const prevCard = useCallback(() => {
-    if(state.index >= 0) {
+    if(state.index > 0) {
       setState({
         ...state,
         card: state.cards[state.index - 1],
