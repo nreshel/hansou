@@ -12,7 +12,7 @@ import '../css/NavBar.css'
 function NavBar() {
   let history = useHistory();
   const { state, setState } = useContext(GlobalContext)
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   console.log("this is coming from the navbar", state)
   return (
     <React.Fragment>
@@ -21,22 +21,22 @@ function NavBar() {
           <a href="/">
             <AiFillHome /> <span>Home</span>
           </a>
-          {/* <a href="/search-card">
-            <AiOutlineSearch /> <span>Search Card</span>
-          </a> */}
           <a onClick={() => history.push({
-            pathname: '/add-card',
+            pathname: '/search-card',
             state: {...state}
           })}>
+            <AiOutlineSearch /> <span>Search Card</span>
+          </a>
+          <a href="/add-card">
             <AiOutlinePlus /> <span>Add Card</span>
           </a>
-          {/* <a href="/dictionary-search">
+          <a href="/dictionary-search">
             <AiOutlineFileSearch /> <span>Dictionary Search</span>
           </a>
-          <div className="arrow-toggle" onClick={() => this.setState({isOpen: !isOpen})}>
+          <div className="arrow-toggle" onClick={() => setIsOpen(!isOpen)}>
             <MdKeyboardArrowLeft />
           </div>
-          <a className="sign-out" href="/" onClick={() => firebase.auth().signOut()
+          <a className="sign-out" href="/" onClick={() => app.auth().signOut()
           .then(() => {
             alert("User has signed out successfully")
           })
@@ -44,10 +44,10 @@ function NavBar() {
             alert(error)
           })}>
             <CgLogOut className="sign-out-icon"/> <span>Sign Out</span>
-          </a> */}
+          </a>
         </div>
       ) : (
-        <div className="hamburger-nav" onClick={() => this.setState({isOpen: !isOpen})}>
+        <div className="hamburger-nav" onClick={() => setIsOpen(!isOpen)}>
           <GiHamburgerMenu />
         </div>
       )}
