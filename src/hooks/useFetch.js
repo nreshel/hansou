@@ -24,24 +24,12 @@ export function useFetch() {
       if((snap.val().date - Date.parse(new Date())) < 0) {
         app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(snap.key).remove(); // removes from the learned database 
         app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).push().set({ // pushes card to the learning database
-          id: snap.val().id,
+          id: snap.key,
           eng: snap.val().eng,
           han: snap.val().han,
           pin: snap.val().pin,
           done: snap.val().done
         })
-      } else {
-        if(snap.exists()) {
-          dbCardsDone.push({
-            key: snap.key,
-            id: snap.val().id,
-            eng: snap.val().eng,
-            han: snap.val().han,
-            pin: snap.val().pin,
-            done: snap.val().done,
-            date: snap.val().date
-          })
-        }
       }
     })
 
@@ -49,14 +37,26 @@ export function useFetch() {
       if(snap.exists()) {
         dbCard = snap.val()
       }
+    })
+    
+    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).on('child_added', snap => {
+      dbCardsDone.push({
+        key: snap.key,
+        id: snap.val().id,
+        eng: snap.val().eng,
+        han: snap.val().han,
+        pin: snap.val().pin,
+        done: snap.val().done,
+        date: snap.val().date
+      })
       setState({
         ...state,
         cards: dbCards,
         cardsDone: dbCardsDone,
         card: dbCard,
-        cardSearch: [...dbCards, ...dbCardsDone],
         index: 0
       })
     })
+
   }, [])
 }

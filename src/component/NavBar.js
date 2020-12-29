@@ -11,26 +11,60 @@ import '../css/NavBar.css'
 
 function NavBar() {
   let history = useHistory();
-  const { state, setState } = useContext(GlobalContext)
+  const { state } = useContext(GlobalContext)
   const [isOpen, setIsOpen] = useState(false);
   console.log("this is coming from the navbar", state)
+  // const isEmpty = !Object.values(state).some(x => (x !== null && x !== '' && x !== [] && x !== {}));
   return (
     <React.Fragment>
       {isOpen ? (
         <div className={`sidebar`} >
-          <a href="/">
+          <a onClick={() => history.push({
+            pathname: '/',
+            state: {
+              cards: state.cards,
+              cardsDone: state.cardsDone,
+              cardSearch: [...state.cards, ...state.cardsDone],
+              card: state.card,
+              index: state.index
+            }
+          })}>
             <AiFillHome /> <span>Home</span>
           </a>
           <a onClick={() => history.push({
             pathname: '/search-card',
-            state: {...state}
+            state: {
+              cards: state.cards,
+              cardsDone: state.cardsDone,
+              cardSearch: [...state.cards, ...state.cardsDone],
+              card: state.card,
+              index: state.index
+            }
           })}>
             <AiOutlineSearch /> <span>Search Card</span>
           </a>
-          <a href="/add-card">
+          <a onClick={() => history.push({
+            pathname: '/add-card',
+            state: {
+              cards: state.cards,
+              cardsDone: state.cardsDone,
+              cardSearch: [...state.cards, ...state.cardsDone],
+              card: state.card,
+              index: state.index
+            }
+          })}>
             <AiOutlinePlus /> <span>Add Card</span>
           </a>
-          <a href="/dictionary-search">
+          <a onClick={() => history.push({
+            pathname: '/dictionary-search',
+            state: {
+              cards: state.cards,
+              cardsDone: state.cardsDone,
+              cardSearch: [...state.cards, ...state.cardsDone],
+              card: state.card,
+              index: state.index
+            }
+          })}>
             <AiOutlineFileSearch /> <span>Dictionary Search</span>
           </a>
           <div className="arrow-toggle" onClick={() => setIsOpen(!isOpen)}>
