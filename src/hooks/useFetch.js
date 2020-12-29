@@ -1,10 +1,10 @@
-import { useEffect, useContext } from 'react'
+import { useMemo, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalState'
 import { app } from '../db/Firebase'
 
 export function useFetch() {
   const { state, setState } = useContext(GlobalContext)
-  useEffect(() => {
+  useMemo(() => {
     let dbCards = [];
     let dbCardsDone = []
     let dbCard = {}

@@ -1,13 +1,15 @@
 import React, { memo, useState, useContext } from 'react'
+import PropTypes from 'prop-types'
 import { GlobalContext } from '../context/GlobalState'
 import { ImArrowLeft2, ImArrowRight2 } from 'react-icons/im'
 import { GrRotateRight } from 'react-icons/gr'
 import '../css/Card.css'
 
-function FlashCard({ card, nextCard, prevCard, removeCard, cardLearned }) {
+function FlashCard({ card, nextCard, prevCard, removeCard, cardLearned, forgotCard }) {
   const { state, setState } = useContext(GlobalContext)
   const [flip, setFlip] = useState(false)
 
+  console.log(card)
   /**
    * When chinese word is click converts text to speech output
    */
@@ -49,9 +51,22 @@ function FlashCard({ card, nextCard, prevCard, removeCard, cardLearned }) {
         <ImArrowRight2 className="right-arrow" onClick={() => nextCard()} />
       </div>
       <button onClick={() => cardLearned(card)} >Done</button>
-      <button>Forgot</button>
+      <button onClick={() => forgotCard(card)} >Forgot</button>
     </div>
   )
+}
+
+FlashCard.propTypes = {
+  card: PropTypes.shape({
+    eng: PropTypes.string,
+    han: PropTypes.string,
+    pin: PropTypes.string
+  }),
+  nextCard: PropTypes.func,
+  prevCard: PropTypes.func,
+  removeCard: PropTypes.func,
+  cardLearned: PropTypes.func,
+  forgotCard: PropTypes.func
 }
 
 export default memo(FlashCard);

@@ -88,9 +88,36 @@ function FlashCardList() {
       setState({
         ...state,
         cards: newList,
-        card: newList[0],
-        index: 0
+        card: newList[1],
+        index: 1
       });
+    },
+    [state.cards, state.card, state.index],
+  )
+
+  const forgotCard = useCallback(
+    (card) => {
+      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card.id).set({
+        id: card.id,
+        eng: card.eng,
+        pin: card.pin,
+        han: card.han,
+        done: 0,
+        date: 0
+      })
+      let newList = state.cards.filter(cardValue => {
+        if(cardValue === card) {
+          cardValue['done'] = 0
+          cardValue['date'] = 0
+        }
+        return cardValue
+      })
+      setState({
+        ...state,
+        cards: newList,
+        card: state.cards[state.index],
+        index: state.index
+      })
     },
     [state.cards, state.card, state.index],
   )
@@ -99,7 +126,7 @@ function FlashCardList() {
     <div className="App">
       <div className="container">
         <h1 class="title">Flashcard app</h1>
-        {state && state.cards && state.cardsDone && <FlashCard card={state.card} nextCard={nextCard} prevCard={prevCard} removeCard={removeCard} cardLearned={cardLearned} />}
+        {state && state.cards && state.cardsDone && <FlashCard card={state.card} nextCard={nextCard} prevCard={prevCard} removeCard={removeCard} cardLearned={cardLearned} forgotCard={forgotCard} />}
       </div>
     </div>
     
