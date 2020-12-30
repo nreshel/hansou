@@ -67,11 +67,12 @@ function SearchFlashCards() {
       speechSynthesis.speak(utterance);
     }
   }
+  console.log(filterCards)
   return (
     <div className="search-div">
-      <input className="search-box" name="search" type="text" placeholder="search card in english..." autocomplete="off" value={state.searchValue} onChange={(e) => (setState({ ...state, searchValue: e.target.value}, filterCards(e)))} />
+      <input className="search-box" name="search" type="text" placeholder="search card in english..." autocomplete="off" value={state.searchValue} onChange={(e) => (setState({ ...state, searchValue: e.target.value}, filterCards()))} />
       <div className="search-container">
-        {!location.state.searchValue && location.state.cardSearch ? location.state.cardSearch.map(card => {
+        {!state.searchValue && location.state.cardSearch ? location.state.cardSearch.map(card => {
           return (
             <div className="card-search-container">
               <div className="search-card">
