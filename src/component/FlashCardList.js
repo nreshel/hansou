@@ -8,7 +8,7 @@ import '../css/FlashCards.css'
 function FlashCardList() {
   const { state, setState } = useContext(GlobalContext)
   useFetch();
-  console.log(Object.values(state.cards))
+  // console.log(Object.values(state.cards))
   const nextCard = useCallback(() => {
     if(state.cards[state.index + 1] !== undefined ) {
       setState({
@@ -23,7 +23,7 @@ function FlashCardList() {
         index: 0
       })
     }
-  }, [state.card, state.index, setState])
+  }, [state.cards, state.card, state.index])
 
   const prevCard = useCallback(() => {
     if(state.index > 0) {
@@ -39,7 +39,7 @@ function FlashCardList() {
         index: state.cards.length - 1
       })
     }
-  }, [state.cards, state.index, setState])
+  }, [state.cards, state.card, state.index])
 
   const removeCard = useCallback((card) => {
     console.log(card.id)
@@ -91,12 +91,9 @@ function FlashCardList() {
         card: newList[1],
         index: 1
       });
-    },
-    [state.cards, state.card, state.index],
-  )
+    }, [state.cards, state.card, state.index])
 
-  const forgotCard = useCallback(
-    (card) => {
+  const forgotCard = useCallback((card) => {
       app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card.id).set({
         id: card.id,
         eng: card.eng,
@@ -118,9 +115,7 @@ function FlashCardList() {
         card: state.cards[state.index],
         index: state.index
       })
-    },
-    [state.cards, state.card, state.index],
-  )
+    }, [state.cards, state.card, state.index])
 
   return (
     <div className="App">
