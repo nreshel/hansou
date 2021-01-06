@@ -7,45 +7,51 @@ import FlashCard from './FlashCard'
 import '../css/FlashCards.css'
 function FlashCardList() {
   const { state, setState } = useContext(GlobalContext)
-  useFetch();
-  console.log(Object.values(state.cards))
+  // useFetch();
+  console.log(Object.entries(state.user.cards || {}))
   const nextCard = useCallback(() => {
-    if(state.cards[state.index + 1] !== undefined ) {
+    if(Object.entries(state.user.cards)[state.index + 1] !== undefined ) {
       setState({
         ...state,
-        card: state.cards[state.index + 1],
         index: state.index + 1
       })
     } else {
       setState({
         ...state,
-        card: state.cards[0],
         index: 0
       })
     }
-  }, [state.card, state.index, setState])
+  }, [state.user.cards, state.index, setState])
 
   const prevCard = useCallback(() => {
     if(state.index > 0) {
       setState({
         ...state,
-        card: state.cards[state.index - 1],
+        // card: state.cards[state.index - 1],
         index: state.index - 1
       })
     } else {
       setState({
         ...state,
-        card: state.cards[state.cards.length - 1],
-        index: state.cards.length - 1
+        // card: state.cards[state.cards.length - 1],
+        index: Object.entries(state.user.cards).length - 1
       })
     }
-  }, [state.cards, state.index, setState])
+  }, [state.user.cards, state.index, setState])
 
   const removeCard = useCallback((card) => {
-    console.log(card.id)
-    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card.id).remove();
-    fetchCards();
-  }, [state.cards, state.card, state.index])
+    console.log(card[0])
+    let filteredKeys = Object.keys(state.user.cards).filter(key => key !== card[0]);
+    let filteredObject = Object.keys(state.user.cards)
+      .filter(key => !filteredKeys.includes(key))
+      .forEach(key => delete state.user.cards[key]);
+    setState({
+      ...state,
+      cards: filteredObject
+    })
+    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card[0]).remove();
+    // fetchCards();
+  }, [state.user.cards, state.index, setState])
 
   const fetchCards = () => {
     let cardList = []
@@ -68,65 +74,64 @@ function FlashCardList() {
   }
 
   const cardLearned = useCallback((card) => {
+    console.log(card, "testing")
+
       var day = new Date();
       console.log(day);
 
       var nextDay = new Date(day);
       const tomorrow = nextDay.setDate(day.getDate() + (card.done ? card.done + 1 : 1));
       console.log(card, tomorrow);
-      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(card.id).push()
-      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(card.id).set({
-        id: card.id,
-        eng: card.eng,
-        pin: card.pin,
-        han: card.han,
-        done: card.done ? card.done + 1 : 1,
+      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(card[0]).push()
+      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(card[0]).set({
+        id: card[0],
+        eng: card[1].eng,
+        pin: card[1].pin,
+        han: card[1].han,
+        done: card[1].done ? card[1].done + 1 : 1,
         date: tomorrow
       });
-      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card.id).remove();
-      let newList = state.cards.filter(cardValue => cardValue !== card)
+      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card[0]).remove();
+      let done = { ...state.user['cards-learned'], [card[0]]: {...card[1]} }
+      let filteredKeys = Object.keys(state.user.cards).filter(key => key !== card[0]);
+      let filteredObject = Object.keys(state.user.cards)
+        .filter(key => !filteredKeys.includes(key))
+        .forEach(key => delete state.user.cards[key]);
       setState({
         ...state,
-        cards: newList,
-        card: newList[1],
+        cards: filteredObject,
+        ['cards-learned']: Object.assign(state.user['cards-learned'], {[card[0]]: card[1]}),
         index: 1
       });
     },
-    [state.cards, state.card, state.index],
+    [state.user.cards, state.user.cardsDone, state.index, setState],
   )
 
-  const forgotCard = useCallback(
-    (card) => {
-      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card.id).set({
-        id: card.id,
-        eng: card.eng,
-        pin: card.pin,
-        han: card.han,
+  const forgotCard = useCallback((card) => {
+    console.log(card[0])
+      app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).child(card[0]).set({
+        id: card[0],
+        eng: card[1].eng,
+        pin: card[1].pin,
+        han: card[1].han,
         done: 0,
         date: 0
       })
-      let newList = state.cards.filter(cardValue => {
-        if(cardValue === card) {
-          cardValue['done'] = 0
-          cardValue['date'] = 0
-        }
-        return cardValue
-      })
+      let newState = state.user.cards
+      newState[card[0]]['done'] = 0
+      newState[card[0]]['date'] = 0
       setState({
         ...state,
-        cards: newList,
-        card: state.cards[state.index],
+        cards: newState,
         index: state.index
       })
-    },
-    [state.cards, state.card, state.index],
-  )
+    }, [state.user.cards, state.index, setState])
 
   return (
     <div className="App">
       <div className="container">
         <h1 class="title">Flashcard app</h1>
-        {state && state.cards && state.cardsDone && <FlashCard card={state.card} nextCard={nextCard} prevCard={prevCard} removeCard={removeCard} cardLearned={cardLearned} forgotCard={forgotCard} />}
+        <FlashCard card={Object.entries(state.user.cards || {})[state.index]} nextCard={nextCard} prevCard={prevCard} removeCard={removeCard} cardLearned={cardLearned} forgotCard={forgotCard} />
       </div>
     </div>
     

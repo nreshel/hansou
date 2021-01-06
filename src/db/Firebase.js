@@ -1,13 +1,13 @@
 import firebase from 'firebase'
 // Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyAqgSbph_yGF42DRrV0BKI8cRqTqbIrl4M",
-  authDomain: "flashcard-app-60cb7.firebaseapp.com",
-  databaseURL: "https://flashcard-app-60cb7.firebaseio.com",
-  projectId: "flashcard-app-60cb7",
-  storageBucket: "flashcard-app-60cb7.appspot.com",
-  messagingSenderId: "1083101443655",
-  appId: "1:1083101443655:web:abab0f9ba19221e7"
-};
+const firebaseConfig = {
+  apiKey: "AIzaSyCfadgMRTLYxV-JbvRBsg_26u9i0JCjWhE",
+  authDomain: "react-flashcards-21788.firebaseapp.com",
+  databaseURL: "https://react-flashcards-21788.firebaseio.com",
+  projectId: "react-flashcards-21788",
+  storageBucket: "",
+  messagingSenderId: "637998614295",
+  appId: "1:637998614295:web:cc602a04a08098ec"
+}
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);

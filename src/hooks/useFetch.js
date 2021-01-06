@@ -1,29 +1,17 @@
-import { useMemo, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalState'
 import { app } from '../db/Firebase'
 
-export function useFetch() {
+export function useFetch(user) {
   const { state, setState } = useContext(GlobalContext)
-  useMemo(() => {
+  useEffect(() => {
     let dbCards = [];
     let dbCardsDone = []
     let dbCard = {}
-    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).on('child_added', snap => {
-      if(snap.exists()) {
-        dbCards.push({
-          id: snap.key,
-          eng: snap.val().eng,
-          han: snap.val().han,
-          pin: snap.val().pin,
-          done: snap.val().done
-        })
-      }
-    })
-
-    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).on('child_added', snap => {
+    app.database().ref(`/users/${user}/cards-learned/`).on('child_added', snap => {
       if((snap.val().date - Date.parse(new Date())) < 0) {
-        app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).child(snap.key).remove(); // removes from the learned database 
-        app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).push().set({ // pushes card to the learning database
+        app.database().ref(`/users/${user}/cards-learned/`).child(snap.key).remove(); // removes from the learned database 
+        app.database().ref(`/users/${user}/cards/`).push().set({ // pushes card to the learning database
           id: snap.key,
           eng: snap.val().eng,
           han: snap.val().han,
@@ -32,31 +20,11 @@ export function useFetch() {
         })
       }
     })
-
-    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards/`).orderByKey().limitToFirst(1).on('child_added', snap => {
-      if(snap.exists()) {
-        dbCard = snap.val()
-      }
-    })
-    
-    app.database().ref(`/users/CaIqDM8rMUgjpiqPEqGV1MzVN9S2/cards-learned/`).on('child_added', snap => {
-      dbCardsDone.push({
-        key: snap.key,
-        id: snap.val().id,
-        eng: snap.val().eng,
-        han: snap.val().han,
-        pin: snap.val().pin,
-        done: snap.val().done,
-        date: snap.val().date
-      })
+    app.database().ref(`/users/${user}/`).on('value', snap => {
       setState({
         ...state,
-        cards: dbCards,
-        cardsDone: dbCardsDone,
-        card: dbCard,
-        index: 0
+        user: snap.val()
       })
     })
-
   }, [])
 }

@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { memo, useState, useMemo, useContext } from 'react';
+import { useFetch } from '../hooks/useFetch'
 import { useHistory } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalState';
 import { app } from '../db/Firebase'
@@ -9,12 +10,12 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { CgLogOut } from 'react-icons/cg'
 import '../css/NavBar.css'
 
-function NavBar() {
+function NavBar({ userId }) {
+  useFetch(userId)
   let history = useHistory();
   const { state } = useContext(GlobalContext)
   const [isOpen, setIsOpen] = useState(false);
   console.log("this is coming from the navbar", state)
-  // const isEmpty = !Object.values(state).some(x => (x !== null && x !== '' && x !== [] && x !== {}));
   return (
     <React.Fragment>
       {isOpen ? (
@@ -22,10 +23,10 @@ function NavBar() {
           <a onClick={() => history.push({
             pathname: '/',
             state: {
-              cards: state.cards,
-              cardsDone: state.cardsDone,
-              cardSearch: [...state.cards, ...state.cardsDone],
-              card: state.card,
+              cards: state.user.cards,
+              cardsDone: state.user['cards-learned'],
+              cardSearch: [...Object.values(state.user.cards || {}), ...Object.values(state.user['cards-learned'] || {})],
+              card: Object.entries(state.user.cards)[state.index],
               index: state.index
             }
           })}>
@@ -33,11 +34,11 @@ function NavBar() {
           </a>
           <a onClick={() => history.push({
             pathname: '/search-card',
-            state: {
-              cards: state.cards,
-              cardsDone: state.cardsDone,
-              cardSearch: [...state.cards, ...state.cardsDone],
-              card: state.card,
+             state: {
+              cards: state.user.cards,
+              cardsDone: state.user['cards-learned'],
+              cardSearch: [...Object.values(state.user.cards || {}), ...Object.values(state.user['cards-learned'] || {})],
+              card: Object.entries(state.user.cards)[state.index],
               index: state.index
             }
           })}>
@@ -45,11 +46,11 @@ function NavBar() {
           </a>
           <a onClick={() => history.push({
             pathname: '/add-card',
-            state: {
-              cards: state.cards,
-              cardsDone: state.cardsDone,
-              cardSearch: [...state.cards, ...state.cardsDone],
-              card: state.card,
+             state: {
+              cards: state.user.cards,
+              cardsDone: state.user['cards-learned'],
+              cardSearch: [...Object.values(state.user.cards || {}), ...Object.values(state.user['cards-learned'] || {})],
+              card: Object.entries(state.user.cards)[state.index],
               index: state.index
             }
           })}>
@@ -57,11 +58,11 @@ function NavBar() {
           </a>
           <a onClick={() => history.push({
             pathname: '/dictionary-search',
-            state: {
-              cards: state.cards,
-              cardsDone: state.cardsDone,
-              cardSearch: [...state.cards, ...state.cardsDone],
-              card: state.card,
+             state: {
+              cards: state.user.cards,
+              cardsDone: state.user['cards-learned'],
+              cardSearch: [...Object.values(state.user.cards || {}), ...Object.values(state.user['cards-learned'] || {})],
+              card: Object.entries(state.user.cards)[state.index],
               index: state.index
             }
           })}>
@@ -90,4 +91,4 @@ function NavBar() {
   )
 }
 
-export default NavBar;
+export default memo(NavBar);

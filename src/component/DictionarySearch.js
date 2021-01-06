@@ -31,64 +31,44 @@ function DictionarySearch() {
   }
   const getFilteredDictionaryLong = () => {
     let fetchCards = []
-    // if(searchValue.match(/(\p{Script=Hani})+/gu) && keycode === 13){
-    //   console.log('enter press here! ')
-      // app.database().ref('/chinese-dictionary-simplified/').orderByKey().startAt(searchValue).endAt(searchValue +"\uf8ff").once('value', (snapshot) => {
-      //   if(snapshot.exists()) {
-      //     Object.entries(snapshot.val()).forEach(([key, value]) => {
-      //       fetchCards.push({
-      //         id: key,
-      //         description: value.description,
-      //         jyut: value.jyutping,
-      //         pin: value.pinyin,
-      //         char: value.word
-      //       })
-      //     })
-      //     setSearchedList(fetchCards)
-      //   } else {
-      //     alert("This query does not match what's in the dictionary, please try again with a different query")
-      //     setSearchValue('')
-      //   }
-      // })
-    // }
-      app.database().ref('/chinese-dictionary-simplified/').orderByChild('description/1').startAt(searchValue).endAt(searchValue+"\uf8ff").once('value', (snapshot) => {
-        if(snapshot.exists()) {
-          Object.entries(snapshot.val()).forEach(([key, value]) => {
-            fetchCards.push({
-              id: key,
-              description: value.description,
-              jyut: value.jyutping,
-              pin: value.pinyin,
-              char: value.word
-            })
+    app.database().ref('/chinese-dictionary-simplified/').orderByChild('description/1').startAt(searchValue).endAt(searchValue+"\uf8ff").once('value', (snapshot) => {
+      if(snapshot.exists()) {
+        Object.entries(snapshot.val()).forEach(([key, value]) => {
+          fetchCards.push({
+            id: key,
+            description: value.description,
+            jyut: value.jyutping,
+            pin: value.pinyin,
+            char: value.word
           })
-          setSearchedList(fetchCards)
-        } else {
-          alert("This query does not match what's in the dictionary, please try again with a different query")
-          setSearchValue('')
-        }
-      })
+        })
+        setSearchedList(fetchCards)
+      } else {
+        alert("This query does not match what's in the dictionary, please try again with a different query")
+        setSearchValue('')
+      }
+    })
   }
   const getFilteredDictionaryShort = () => {
     let fetchCards = []
-      app.database().ref('/chinese-dictionary-simplified/').orderByChild('description/1').equalTo(searchValue).once('value', (snapshot) => {
-        if(snapshot.exists()) {
-          Object.entries(snapshot.val()).forEach(([key, value]) => {
-            fetchCards.push({
-              id: key,
-              description: value.description,
-              jyut: value.jyutping,
-              pin: value.pinyin,
-              char: value.word
-            })
+    app.database().ref('/chinese-dictionary-simplified/').orderByChild('description/1').equalTo(searchValue).once('value', (snapshot) => {
+      if(snapshot.exists()) {
+        Object.entries(snapshot.val()).forEach(([key, value]) => {
+          fetchCards.push({
+            id: key,
+            description: value.description,
+            jyut: value.jyutping,
+            pin: value.pinyin,
+            char: value.word
           })
-          setSearchedList(fetchCards)
-        } else {
-          alert("This query does not match what's in the dictionary, please try again with a different query")
-          setSearchValue('')
-        }
-      })
-      console.log('enter press here! ')
+        })
+        setSearchedList(fetchCards)
+      } else {
+        alert("This query does not match what's in the dictionary, please try again with a different query")
+        setSearchValue('')
+      }
+    })
+    console.log('enter press here! ')
   }
 
   const onEnter = (e) => {

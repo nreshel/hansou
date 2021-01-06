@@ -2,9 +2,7 @@ import React, { createContext, useState } from 'react'
 import { app } from '../db/Firebase'
 
 const initialState = {
-  cards: [],
-  cardsDone: [],
-  card: {},
+  user: {},
   index: 0
 }
 

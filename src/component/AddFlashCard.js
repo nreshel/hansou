@@ -33,7 +33,9 @@ function AddFlashCard() {
       ...card, 
       eng: '',
       pin: '',
-      han: ''
+      han: '',
+      done: 0,
+      date: 0
     });
   }
 
